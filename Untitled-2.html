@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', sans-serif;
+}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background: radial-gradient(circle at bottom, #020111 0%, #000000 70%);
+  color:white;
+  text-align:center;
+}
+
+.gif-bottom{
+  width:150px;
+  margin-top:20px;
+}
+
+.container{
+  z-index:2;
+  padding:20px;
+  animation: fadeIn 2s ease forwards;
+}
+
+h1{
+  font-size:2.5rem;
+  animation: glow 2s infinite alternate;
+}
+
+p{
+  margin-top:15px;
+  font-size:1.2rem;
+  opacity:0;
+  animation: fadeIn 3s ease forwards;
+  animation-delay:1s;
+}
+
+button{
+  margin-top:25px;
+  padding:12px 25px;
+  font-size:1rem;
+  border:none;
+  border-radius:30px;
+  background:#ff4b5c;
+  color:white;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{
+  transform:scale(1.1);
+  background:#ff1e3c;
+}
+
+canvas{
+  position:absolute;
+  top:0;
+  left:0;
+}
+
+@keyframes floatGif{
+  0%{transform:translateX(-50%) translateY(0);}
+  50%{transform:translateX(-50%) translateY(-10px);}
+  100%{transform:translateX(-50%) translateY(0);}
+}
+
+.bottom-gif{
+  position:fixed;
+  bottom:10px;
+  left:50%;
+  width:120px;
+  animation:floatGif 2s ease-in-out infinite;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;}
+  to{opacity:1;}
+}
+
+@keyframes glow{
+  from{text-shadow:0 0 10px #ff4b5c;}
+  to{text-shadow:0 0 25px #ffd700;}
+}
+
+@media(max-width:600px){
+  h1{font-size:1.8rem;}
+  p{font-size:1rem;}
+}
+
+</style>
+</head>
+
+<body>
+<img src="GG/Gif.gif" class="gif-bottom">
+<canvas id="fireworks"></canvas>
+
+<div class="container">
+  <h1 id="title"></h1>
+  <p>Өдрийг сайхан өнгөрүүлээрэй бас сайхан баярлаарай уулзах өдрийг тэсэн ядан хүлээж байя ххэ💖🎇</p>
+  <button onclick="launchFireworks()">Happy Birthdayyy🎉</button>
+</div>
+
+<script>
+document.getElementById("title").innerText =
+  "🎂Мөнгөө найздаа Төрсөн өдрийн мэнд хүргэе🫶" + name + "🎉";
+
+
+const canvas = document.getElementById("fireworks");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+
+
+let particles = [];
+
+function createFirework(x, y){
+  for(let i=0;i<50;i++){
+    particles.push({
+      x:x,
+      y:y,
+      angle:Math.random()*2*Math.PI,
+      speed:Math.random()*5+2,
+      radius:2,
+      life:100,
+      color:`hsl(${Math.random()*360},100%,50%)`
+    });
+  }
+}
+
+function update(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach((p,index)=>{
+    p.x += Math.cos(p.angle)*p.speed;
+    p.y += Math.sin(p.angle)*p.speed;
+    p.life--;
+    ctx.beginPath();
+    ctx.arc(p.x,p.y,p.radius,0,Math.PI*2);
+    ctx.fillStyle=p.color;
+    ctx.fill();
+    if(p.life<=0) particles.splice(index,1);
+  });
+  requestAnimationFrame(update);
+}
+
+function launchFireworks(){
+  for(let i=0;i<5;i++){
+    setTimeout(()=>{
+      createFirework(
+        Math.random()*canvas.width,
+        Math.random()*canvas.height/2
+      );
+    }, i*400);
+  }
+}
+
+update();
+
+
+window.addEventListener("resize",()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
+
